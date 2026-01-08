@@ -8,7 +8,7 @@ metadata:
     app: coordinates-api-svc 
      
 spec:
-  type: clusterIP 
+  type: ClusterIP
   clusterIP: None
   selector:
         app: coordinates-api
@@ -16,7 +16,7 @@ spec:
   - port: 5432
     name: web
     targetPort: 8000 
-    nodePort: 30080
+    
 
   
         
