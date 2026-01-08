@@ -29,7 +29,7 @@ spec:
           - name: POSTGRES_USER 
             value: postgres 
         volumeMounts:
-        - name: template
+        - name: postgres-storage
           mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:  
   - metadata:

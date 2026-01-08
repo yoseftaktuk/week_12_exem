@@ -4,9 +4,10 @@ kind: Service
 metadata:
   name: coordinates-api-svc
   labels:
-     app: coordinates-api-svc 
+     app: coordinates-api
 spec:
   type: NodePort 
+  
   selector:
     app: coordinates-api
   ports:
