@@ -2,8 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: coordinates-api
-  labels:
-    app: coordinates-api
+  label: coordinates-api 
 spec:
   replicas: 3
   selector:
@@ -12,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        app: nginx
+        app: coordinates-api
     spec:
       containers:
       - name: coordinates-api
@@ -23,7 +22,7 @@ spec:
           - name: POSTGRES_HOST   
             value: postgres-0.coordinates-api-svc 
           - name: POSTGRES_PORT
-            value: 5432
+            value: "5432"
           - name: POSTGRES_DB 
             value: coordinates_db 
           - name: POSTGRES_USER
