@@ -4,7 +4,7 @@ kind: StatefulSet
 
 metadata:
   name: postgres
-
+  labels: postgres
 spec:
   selector:
     matchLabels:
