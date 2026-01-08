@@ -1,42 +1,77 @@
+# apiVersion: apps/v1
+
+# kind: StatefulSet
+
+# metadata:
+#   name: postgres
+
+# spec:
+#   selector:
+#     matchLabels:
+#       app: postgres-app 
+
+#   serviceName: postgres-svc 
+#   replicas: 3  
+
+#   template:
+#     metadata:
+#       labels:
+#         app: postgres-app
+#     spec:
+#         containers:
+#         - name: postgres-app
+#           image: postgres:15
+#           ports:
+#             - ContainerPort: 5432
+#           env:
+#             - name: POSTGRES_DB   
+#               value: coordinates_db 
+#             - name: POSTGRES_USER 
+#               value: postgres 
+#           volumeMounts:
+#           - name: postgres-storage
+#             mountPath: /var/lib/postgresql/data
+#   volumeClaimTemplates:  
+#   - metadata:
+#       name: postgres-storage 
+#   spec:
+#       accessModes: [ "ReadWriteOnce" ]
+#       resources:
+#         requests:
+#           storage: 1Gi               
+
 apiVersion: apps/v1
-
 kind: StatefulSet
-
 metadata:
-  name: postgres
-  labels: postgres
+  name: web
 spec:
   selector:
     matchLabels:
-      app: postgres-app 
-
-  serviceName: postgres-svc 
-  replicas: 3  
-
+      app: nginx # has to match .spec.template.metadata.labels
+  serviceName: "nginx"
+  replicas: 3 # by default is 1
+  minReadySeconds: 10 # by default is 0
   template:
     metadata:
       labels:
-        app: postgres-app
+        app: nginx # has to match .spec.selector.matchLabels
     spec:
-        containers:
-        - name: postgres-app
-          image: postgres:15
-          ports:
-            containerPort: 5432
-          env:
-            - name: POSTGRES_DB   
-              value: coordinates_db 
-            - name: POSTGRES_USER 
-              value: postgres 
-          volumeMounts:
-          - name: postgres-storage
-            mountPath: /var/lib/postgresql/data
-  volumeClaimTemplates:  
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: nginx
+        image: registry.k8s.io/nginx-slim:0.24
+        ports:
+        - containerPort: 80
+          name: web
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
   - metadata:
-    name: postgres-storage 
-  spec:
+      name: www
+    spec:
       accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "my-storage-class"
       resources:
         requests:
-          storage: 1Gi               
-
+          storage: 1Gi
